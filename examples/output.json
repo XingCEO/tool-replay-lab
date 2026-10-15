@@ -1,0 +1,31 @@
+{
+  "changes": [
+    {
+      "expected": {
+        "arguments": {
+          "q": "cache"
+        },
+        "result": {
+          "count": 2
+        },
+        "tool": "search"
+      },
+      "expected_index": 0,
+      "kind": "response_changed",
+      "observed": {
+        "arguments": {
+          "q": "cache"
+        },
+        "result": {
+          "count": 3
+        },
+        "tool": "search"
+      },
+      "observed_index": 0
+    }
+  ],
+  "ignored_pointers": [
+    "/result/request_id"
+  ],
+  "matches": false
+}

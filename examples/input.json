@@ -1,0 +1,29 @@
+{
+  "expected": [
+    {
+      "tool": "search",
+      "arguments": {
+        "q": "cache"
+      },
+      "result": {
+        "count": 2,
+        "request_id": "old"
+      }
+    }
+  ],
+  "observed": [
+    {
+      "tool": "search",
+      "arguments": {
+        "q": "cache"
+      },
+      "result": {
+        "count": 3,
+        "request_id": "new"
+      }
+    }
+  ],
+  "ignore": [
+    "/result/request_id"
+  ]
+}
