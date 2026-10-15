@@ -49,23 +49,34 @@ def analyze(data):
 
 
 def main():
-    """Read one UTF-8 JSON document and emit one machine-readable report."""
+    """Analyze a JSON envelope or explicitly selected native files."""
     import argparse
     import json
     import sys
     from pathlib import Path
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("input", help="JSON input path, or - for stdin")
+    parser.add_argument('input', nargs='?', help='JSON input path, or - for stdin')
+    parser.add_argument('--expected', help='Read expected directly from a local file')
+    parser.add_argument('--observed', help='Read observed directly from a local file')
+    parser.add_argument('--ignore', action='append', default=[], help='JSON Pointer to ignore; repeat for multiple paths')
     args = parser.parse_args()
+    native = bool(args.expected or args.observed)
+    if native and (args.input or not (args.expected and args.observed)):
+        parser.error('Supply all native file flags, without a positional JSON input')
+    if not native and not args.input:
+        parser.error('Supply a JSON input or native file flags')
     try:
-        raw = sys.stdin.read() if args.input == "-" else Path(args.input).read_text(encoding="utf-8")
-        data = json.loads(raw)
+        if native:
+            data = {'expected': json.loads(Path(args.expected).read_text()), 'observed': json.loads(Path(args.observed).read_text()), 'ignore': args.ignore}
+        else:
+            raw = sys.stdin.read() if args.input == '-' else Path(args.input).read_text(encoding='utf-8')
+            data = json.loads(raw)
         if not isinstance(data, dict):
-            raise ValueError("input must be a JSON object")
+            raise ValueError('input must be a JSON object')
         result = analyze(data)
         print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
     except (OSError, ValueError, KeyError, TypeError, OverflowError) as error:
-        print(f"Invalid input: {error}", file=sys.stderr)
+        print(f'Invalid input: {error}', file=sys.stderr)
         return 2
     return 0
 

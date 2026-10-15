@@ -1,0 +1,12 @@
+[
+  {
+    "tool": "search",
+    "arguments": {
+      "q": "cache"
+    },
+    "result": {
+      "count": 2,
+      "request_id": "old"
+    }
+  }
+]
